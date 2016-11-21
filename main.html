@@ -30,6 +30,24 @@
             background-color: cadetblue;
             text-align: center;
         }
+        #list{
+            width:60%;
+            height: 100%;
+            float:left;
+        }
+        #new{
+            position: relative;
+            top: 85%;
+            left: 1%;
+        }
+        #preview{
+            width: 40%;
+            height: 100%;
+            display: inline-block;
+            background-color: black;
+            color:white;
+            text-align: center;
+        }
         </style>
     </head>
     <body>
@@ -43,6 +61,22 @@
             <h3>2016-11-21</h3>
         </div>
         <div id="board">
+            <div id="list">
+                <table width="100%" border="2">
+                    <tr>
+                        <th width="5%">순번</th>
+                        <th width="90%">할 일</th>
+                        <th width="5%">완료</th>
+                    </tr>
+                </table>
+                <div id="new">
+                    <input type="text" placeholder="할 일 추가" size="80" style="height:30;">
+                    <input type="button" value="추가">
+                </div>
+            </div>
+            <div id="preview">
+                자세히 보기
+            </div>
         </div>
         <div class="trash">
             휴지통
