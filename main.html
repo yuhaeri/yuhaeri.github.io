@@ -36,8 +36,8 @@
             float:left;
         }
         #new{
-            position: relative;
-            top: 85%;
+            position:absolute;
+            bottom:15%;
             left: 1%;
         }
         #preview{
@@ -70,7 +70,7 @@
                     </tr>
                 </table>
                 <div id="new">
-                    <input type="text" id="newadd" placeholder="할 일 추가" size="80" style="height:30;">
+                    <input type="text" id="newadd" placeholder="할 일 추가" size="80" style="height:30;" onkeypress="if(event.keyCode==13){add();}"/>
                     <input type="button" value="추가" onclick="add();">
                 </div>
             </div>
@@ -108,6 +108,7 @@
             row.appendChild(todo);
             row.appendChild(com);
             table.appendChild(row);
+            document.getElementById("newadd").value="";
         }
         </script>
     </body>
