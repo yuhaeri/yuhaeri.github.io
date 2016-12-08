@@ -62,7 +62,7 @@
         </div>
         <div id="board">
             <div id="list">
-                <table width="100%" border="2">
+                <table width="100%" border="2" id="listtable">
                     <tr>
                         <th width="5%">순번</th>
                         <th width="90%">할 일</th>
@@ -70,16 +70,12 @@
                     </tr>
                 </table>
                 <div id="new">
-                    <input type="text" placeholder="할 일 추가" size="80" style="height:30;">
-                    <input type="button" value="추가">
+                    <input type="text" id="newadd" placeholder="할 일 추가" size="80" style="height:30;">
+                    <input type="button" value="추가" onclick="add();">
                 </div>
             </div>
             <div id="preview">
-                자세히 보기
             </div>
-        </div>
-        <div class="trash">
-            휴지통
         </div>
         <script>
         function move(){
@@ -96,6 +92,22 @@
                     document.getElementById("labe").innerHTML=width*1+'%';
                 }
             }
+        }
+        function add(){
+            var table=document.getElementById("listtable");
+            var val=document.getElementById("newadd").value;
+            var row=document.createElement("tr");
+            var num=document.createElement("td");
+            var todo=document.createElement("td");
+            var com=document.createElement("td");
+            var rum=table.rows.length;
+            num.innerHTML=rum;
+            todo.innerHTML=val;
+            com.innerHTML="미";
+            row.appendChild(num);
+            row.appendChild(todo);
+            row.appendChild(com);
+            table.appendChild(row);
         }
         </script>
     </body>
