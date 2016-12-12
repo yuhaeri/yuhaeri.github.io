@@ -35,17 +35,11 @@
             height: 100%;
             float:left;
         }
-        #new{
-            position:absolute;
-            bottom:15%;
-            left: 1%;
-        }
         #preview{
             width: 40%;
             height: 100%;
             display: inline-block;
-            background-color: black;
-            color:white;
+            background-color:mediumturquoise;
             text-align: center;
         }
         </style>
@@ -57,58 +51,138 @@
                 <div id="label">0%</div>
             </div>
         </div>
-        <div id="date">
-            <h3>2016-11-21</h3>
-        </div>
+
+            <h3 id="date"></h3>
+
         <div id="board">
             <div id="list">
                 <table width="100%" border="2" id="listtable">
                     <tr>
                         <th width="5%">순번</th>
-                        <th width="90%">할 일</th>
+                        <th width="85%">할 일</th>
                         <th width="5%">완료</th>
+                        <th width="5%">삭제</th>
                     </tr>
                 </table>
+
+            </div>
+            <div id="preview">
+                <h2 style="text-align">추가하기</h2>
                 <div id="new">
                     <input type="text" id="newadd" placeholder="할 일 추가" size="80" style="height:30;" onkeypress="if(event.keyCode==13){add();}"/>
                     <input type="button" value="추가" onclick="add();">
+                    <img src="set_down.png" id="arrow_down" width="30px" height="30px">
                 </div>
-            </div>
-            <div id="preview">
             </div>
         </div>
         <script>
+        //달성률
         function move(){
             var elem= document.getElementById("bar");
             var width=0;
-            var id=setInterval(frame,0);
-            function frame(){
-                if(width>=100){
-                    clearInterval(id);
-                }
-                else{
-                    width++;
-                    elem.style.width=width+'%';
-                    document.getElementById("labe").innerHTML=width*1+'%';
-                }
-            }
-        }
-        function add(){
             var table=document.getElementById("listtable");
+            var check=document.getElementsByName("c");
+            var checked=0;
+            if(check.length==0){
+                width=0;
+            }
+            else{
+            for(var i=0; i<check.length; i++){
+                if(check[i].checked==true)
+                checked++;
+            }
+            var unit=(1/check.length)*100;
+            width=checked*unit;
+            }
+            elem.style.width=width+'%';
+            document.getElementById("label").innerHTML=Math.ceil(width)*1+'%';
+        }
+        //할일 추가
+        function add(){
             var val=document.getElementById("newadd").value;
+            if(val==""){
+                alert("할 일을 입력해 주세요!");
+            }
+            else{
+            var table=document.getElementById("listtable");
             var row=document.createElement("tr");
+            row.onmouseover=function(){table.clickedRowIndex=this.rowIndex};
             var num=document.createElement("td");
             var todo=document.createElement("td");
             var com=document.createElement("td");
+            var del=document.createElement("td");
             var rum=table.rows.length;
             num.innerHTML=rum;
             todo.innerHTML=val;
-            com.innerHTML="미";
+            com.innerHTML="<input type='checkbox' name='c' onclick='move();'>";
+            del.innerHTML="<a href='javascript:del();'><img src='./cancel_32_4c00ff.png' width=15px height=15px></a>"
             row.appendChild(num);
             row.appendChild(todo);
             row.appendChild(com);
+            row.appendChild(del);
             table.appendChild(row);
             document.getElementById("newadd").value="";
+            move();
+            }
+        }
+        //할일 삭제
+        function del(){
+            //확인창 만들기
+            var table= document.getElementById("listtable");
+            table.deleteRow(table.clickedRowIndex);
+            for(var ro=table.clickedRowIndex; ro<table.rows.length; ro++ ){
+                table.rows[ro].cells[0].innerHTML=ro;
+            }
+            move();
+        }
+
+        window.onload=function(){
+            //현재 날짜 표시
+            var date=new Date();
+            var year=date.getFullYear();
+            var month=date.getMonth()+1;
+            var day=date.getDate();
+            document.querySelector("#date").innerHTML=year+'-'+month+'-'+day;
+            //세부사항 입력창 애니메이션
+            var rotated=false;
+            var arrow=document.querySelector("#arrow_down");
+            var angle=0;
+            var unit=45;
+            var clicked=0;
+            arrow.onclick=function(){
+                clicked++;
+                if(clicked>=2) return;
+                var oldTick=(new Date()).getTime();
+                unit=-unit;
+                function loop(){
+                    var deltaTick=(new Date()).getTime()-oldTick;
+                    angle+=(deltaTick/200)*unit;
+                    if(rotated==false){
+                        if(angle>-180){
+                            arrow.style.transform='rotate('+angle+'deg)'
+                            requestAnimationFrame(loop);
+                        }
+                        else{
+                            rotated=true;
+                            clicked=0;
+                            return;
+                        }
+                    }
+                    else{
+                        if(angle<0){
+                            arrow.style.transform='rotate('+angle+'deg)'
+                            requestAnimationFrame(loop);
+                        }
+                        else{
+                            rotated=false;
+                            clicked=0;
+                            return;
+                        }
+                    }
+                    oldTick=(new Date()).getTime();
+                }
+                loop();
+            }
         }
         </script>
     </body>
